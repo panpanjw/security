@@ -2,9 +2,13 @@ package com.security;
 
 
 import com.entity.UserEntity;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +28,7 @@ public class JwtTokenUtil {
         Date now = new Date(nowMillis);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("id", userEntity.getUserId());
+        map.put("id", userEntity.getId());
         map.put("username", userEntity.getUserName());
 
         JwtBuilder jwtBuilder = Jwts.builder()
@@ -39,14 +43,38 @@ public class JwtTokenUtil {
     }
 
 
+    /**
+     * 从Token中获取用户名
+     * @param token
+     * @return
+     */
+    public  String getUserNameForToken(String token){
+        String userName = null;
+        try {
+            Claims claims = getClaimsFormToken(token);
+            userName = claims.get("sub", String.class);
+        } catch (Exception e){
+            userName = null;
+        }
 
-    public static String verifyToken(String token){
-        String userId = Jwts.parser()
-                .setSigningKey(SINGNING_KEY)
-                .parseClaimsJws(token)
-                .getBody()
-                .getId();
-        return userId;
+        return userName;
+    }
+
+    /**
+     * 解析Token
+     * @param token
+     * @return
+     */
+    private Claims getClaimsFormToken(String token){
+        Claims claims = null;
+        try {
+            Key key = new SecretKeySpec(SINGNING_KEY.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+            claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+        } catch (Exception e) {
+            claims = null;
+        }
+
+        return claims;
     }
 
 

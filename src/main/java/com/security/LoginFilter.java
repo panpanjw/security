@@ -1,6 +1,6 @@
 package com.security;
 
-import com.Repository.UserReposiroty;
+import com.repository.UserRepository;
 import com.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Autowired
-    private UserReposiroty userReposiroty;
+    private UserRepository userReposiroty;
 
     private AuthenticationManager authenticationManager;
 
