@@ -1,0 +1,22 @@
+server:
+  port: 9090
+spring:
+  application:
+    name: security
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://172.18.39.134:3306/lcm_project?useSSL=false&useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&autoReconnectForPools=true&allowMultiQueries=true
+    username: root
+    password: root
+  jpa:
+    database: MySQL
+    show-sql: true
+    open-in-view: true
+    hibernate:
+      ddl-auto: update
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL57Dialect
+      show-sql: false
+
+
