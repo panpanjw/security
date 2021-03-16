@@ -25,7 +25,7 @@ import java.util.ArrayList;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
+    @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired

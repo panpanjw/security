@@ -57,7 +57,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String password = request.getParameter("password");
 
         //TODO 用户名密码校验
-
+        
         return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>()));
     }
 
