@@ -2,13 +2,14 @@ package com.security;
 
 
 import com.entity.UserEntity;
+import com.security.usersDetail.JwtUserDetail;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
-import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,12 @@ public class JwtTokenUtil {
     private static String SINGNING_KEY = "123456";
 
 
+    /**
+     * 生成令牌，Token
+     * @param userEntity
+     * @param expirationMillis
+     * @return
+     */
     public static String createToken(UserEntity userEntity, long expirationMillis){
         long nowMillis = System.currentTimeMillis();
         Date now = new Date(nowMillis);
@@ -48,7 +55,7 @@ public class JwtTokenUtil {
      * @param token
      * @return
      */
-    public  String getUserNameForToken(String token){
+    public static String getUserNameFromToken(String token){
         String userName = null;
         try {
             Claims claims = getClaimsFormToken(token);
@@ -61,20 +68,71 @@ public class JwtTokenUtil {
     }
 
     /**
-     * 解析Token
+     * 校验令牌
+     * @param token
+     * @param userDetails
+     * @return
+     */
+    public static Boolean checkToken(String token, UserDetails userDetails){
+        //验证用户名是否相同
+        JwtUserDetail jwtUserDetail = (JwtUserDetail) userDetails;
+        String userName = getUserNameFromToken(token);
+
+        if (StringUtils.isEmpty(userName)){
+            return false;
+        }
+
+        if ( !jwtUserDetail.equals(userName) ){
+            return false;
+        }
+
+        if ( !isTokenExpired(token) ){
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 刷新令牌
      * @param token
      * @return
      */
-    private Claims getClaimsFormToken(String token){
+    public String refreshToken(String token){
+        Claims claims = getClaimsFormToken(token);
+        return null;
+    }
+
+    /**
+     * 解析Token,从令牌中获取数据声明
+     * @param token
+     * @return
+     */
+    private static Claims getClaimsFormToken(String token){
         Claims claims = null;
         try {
-            Key key = new SecretKeySpec(SINGNING_KEY.getBytes(), SignatureAlgorithm.HS256.getJcaName());
-            claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+            claims = Jwts.parser().setSigningKey(SINGNING_KEY).parseClaimsJws(token).getBody();
         } catch (Exception e) {
             claims = null;
         }
 
         return claims;
+    }
+
+    /**
+     * 判断令牌是否过期
+     *
+     * @param token 令牌
+     * @return 是否过期
+     */
+    private static Boolean isTokenExpired(String token) {
+        try {
+            Claims claims = getClaimsFormToken(token);
+            Date expiration = claims.getExpiration();
+            return expiration.before(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 

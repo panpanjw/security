@@ -1,4 +1,4 @@
-package com.security;
+package com.security.usersDetail;
 
 import com.entity.UserEntity;
 import com.service.UserService;
@@ -9,15 +9,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author panjw
  * @date 2021/3/15 23:44
  */
 @Service
-public class UserDetailServiceImpl implements UserDetailsService {
+public class JwtUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserService userService;
 
@@ -27,16 +24,16 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (userEntity == null){
             throw new UsernameNotFoundException("用户不存在");
         }
+
+        //将数据库的roles解析为UserDetails的权限集
         StringBuilder roles = new StringBuilder();
         userEntity.getRoleEntityList().stream().forEach( (roleEntity)-> {
             roles.append(roleEntity.getRoleName()).append(",");
         });
 
-        UserDetail userDetail = new UserDetail();
-        userDetail.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList(roles.toString()));
 
-        //将数据库的roles解析为UserDetails的权限集
-
-        return null;
+        JwtUserDetail jwtUserDetail = new JwtUserDetail(userEntity.getUserName(), userEntity.getPassword(),
+                AuthorityUtils.commaSeparatedStringToAuthorityList(roles.toString()));
+        return jwtUserDetail;
     }
 }

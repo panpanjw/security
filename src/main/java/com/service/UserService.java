@@ -1,7 +1,6 @@
 package com.service;
 
 import com.entity.UserEntity;
-import com.security.UserDetail;
 
 /**
  * @author panjw

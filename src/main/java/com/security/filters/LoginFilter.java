@@ -1,7 +1,8 @@
-package com.security;
+package com.security.filters;
 
 import com.repository.UserRepository;
 import com.entity.UserEntity;
+import com.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 /**
  * 认证过滤器
  */
+
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Autowired
     private UserRepository userReposiroty;
@@ -34,6 +37,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
     public LoginFilter(AuthenticationManager authenticationManager) {
+
         this.authenticationManager = authenticationManager;
         this.setPostOnly(false);
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));

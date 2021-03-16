@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 @SpringBootTest(classes = SecurityApplication.class)
 @ActiveProfiles("dev")
 public class test {
-    @Resource
+    @Autowired
     private UserService userService;
 
     @Test

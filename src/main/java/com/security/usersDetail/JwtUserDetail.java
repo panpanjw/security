@@ -1,4 +1,4 @@
-package com.security;
+package com.security.usersDetail;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,9 +10,18 @@ import java.util.List;
  * @author panjw
  * @date 2021/3/15 23:36
  */
-public class UserDetail implements UserDetails {
+public class JwtUserDetail implements UserDetails {
+    private String userName;
 
-    private List<GrantedAuthority> authorities;
+    private String password;
+
+    private Collection<? extends GrantedAuthority> authorities;
+
+    JwtUserDetail(String username, String password, Collection<? extends GrantedAuthority> authorities){
+        this.userName = username;
+        this.password = password;
+        this.authorities = authorities;
+    }
 
     public void setAuthorities(List<GrantedAuthority> authorities){
         this.authorities = authorities;

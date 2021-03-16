@@ -29,10 +29,11 @@ public class UserServiceImpl implements UserService {
         RoleEntity roleEntity = roleRepository.findFirstByRoleName("admin");
         RoleEntity roleEntity1 = roleRepository.findFirstByRoleName("user");
         List<RoleEntity> roleEntityList = new ArrayList<>();
-        roleEntityList.add(roleEntity);
-        //roleEntityList.add(roleEntity1);
+        //roleEntityList.add(roleEntity);
+        roleEntityList.add(roleEntity1);
         userEntity.setUserName("panjw");
         userEntity.setPassword("123456");
+        userEntity.setEnable(true);
         userEntity.setRoleEntityList(roleEntityList);
         userRepository.save(userEntity);
     }
