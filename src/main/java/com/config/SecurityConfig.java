@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
 
-
+    @Autowired
     private DefaultPasswordEncoder defaultPasswordEncoder;
 
     @Override
