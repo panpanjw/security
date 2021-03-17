@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DefaultPasswordEncoder defaultPasswordEncoder;
 
+
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint())

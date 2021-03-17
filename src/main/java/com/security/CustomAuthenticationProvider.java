@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author panjw
@@ -34,6 +35,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (userEntity.getEnable() == false){
             throw new AccountExpiredException("用户被禁用");
         }
+
 
         if (!userEntity.getUserName().equals(authentication.getCredentials().toString()) ){
             throw new PasswordErrorException("密码错误");
