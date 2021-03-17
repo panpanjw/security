@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author panjw
  * @date 2021/3/16 17:42
  */
-
+@Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserService userService;
@@ -35,7 +35,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new AccountExpiredException("用户被禁用");
         }
 
-        if (!userEntity.getUserName().equals(authentication.getCredentials().toString()) ){
+        if (!userEntity.getPassword().equals(authentication.getCredentials().toString()) ){
             throw new PasswordErrorException("密码错误");
         }
 

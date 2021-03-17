@@ -4,7 +4,9 @@ import com.security.*;
 import com.security.filters.JwtAuthenticationFilter;
 import com.security.filters.LoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,6 +33,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DefaultPasswordEncoder defaultPasswordEncoder;
 
+    @Autowired
+    private CustomAuthenticationProvider customAuthenticationProvider;
+
+    @Override
+    @Bean
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+    @Bean
+    public LoginFilter loginFilter(AuthenticationManager authenticationManager){
+        return new LoginFilter(authenticationManager);
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthenticationManager authenticationManager){
+        return new JwtAuthenticationFilter(authenticationManager);
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint())
@@ -42,13 +63,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .logout().logoutUrl("/logout")
                 .and()
-                .addFilter(new LoginFilter(authenticationManager()))
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()));
+                .addFilter(loginFilter(authenticationManager()))
+                .addFilter(jwtAuthenticationFilter(authenticationManager()));
     }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(defaultPasswordEncoder);
+        auth.authenticationProvider(customAuthenticationProvider).userDetailsService(userDetailsService).passwordEncoder(defaultPasswordEncoder);
     }
 
     /**
