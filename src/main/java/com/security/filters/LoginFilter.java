@@ -2,9 +2,11 @@ package com.security.filters;
 
 import com.repository.UserRepository;
 import com.entity.UserEntity;
+import com.security.CustomAuthenticationProvider;
 import com.security.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -34,6 +36,10 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
+
+
 
 
     public LoginFilter(AuthenticationManager authenticationManager) {
@@ -58,7 +64,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         //TODO 用户名密码校验
         
-        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>()));
+        //return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>()));
+        CustomAuthenticationProvider customAuthenticationProvider = new CustomAuthenticationProvider();
+        return customAuthenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>()));
     }
 
     /**

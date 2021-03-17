@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author panjw
  * @date 2021/3/16 17:42
  */
-@Component
+
 public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserService userService;
