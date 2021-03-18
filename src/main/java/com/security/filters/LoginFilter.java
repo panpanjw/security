@@ -4,7 +4,9 @@ import com.repository.UserRepository;
 import com.entity.UserEntity;
 import com.security.CustomAuthenticationProvider;
 import com.security.JwtTokenUtil;
+import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,14 +31,13 @@ import java.util.ArrayList;
 /**
  * 认证过滤器
  */
+
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Autowired
     private UserRepository userReposiroty;
 
     private AuthenticationManager authenticationManager;
 
-    @Autowired
-    private CustomAuthenticationProvider customAuthenticationProvider;
 
     public LoginFilter(AuthenticationManager authenticationManager) {
 
@@ -44,6 +45,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.setPostOnly(false);
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
     }
+
 
     /**
      * 获取用户参数并校验
@@ -59,9 +61,8 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String password = request.getParameter("password");
 
         //TODO 用户名密码校验
-        AuthenticationProvider authenticationProvider = new CustomAuthenticationProvider();
-        return authenticationProvider.authenticate(new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>()));
-        //return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>()));
+        
+        return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>()));
     }
 
     /**
