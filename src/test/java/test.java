@@ -1,4 +1,6 @@
 import com.SecurityApplication;
+import com.entity.PermissionEntity;
+import com.repository.PermissionReposiroty;
 import com.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,9 +22,19 @@ import javax.annotation.Resource;
 public class test {
     @Autowired
     private UserService userService;
+    @Autowired
+    private PermissionReposiroty permissionReposiroty;
 
     @Test
     public void addData(){
         userService.addUser();
+    }
+
+    @Test
+    public void addPermission(){
+        PermissionEntity permissionEntity = new PermissionEntity();
+        permissionEntity.setPermissionName("案源权限");
+        permissionEntity.setUrl("/caseSource");
+        permissionReposiroty.save(permissionEntity);
     }
 }

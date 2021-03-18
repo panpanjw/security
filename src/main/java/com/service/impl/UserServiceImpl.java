@@ -2,15 +2,21 @@ package com.service.impl;
 
 import com.entity.RoleEntity;
 import com.entity.UserEntity;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.repository.RoleRepository;
 import com.repository.UserRepository;
+import com.security.usersDetail.JwtUserDetail;
 import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author panjw
@@ -34,7 +40,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setUserName("panjw");
         userEntity.setPassword("123456");
         userEntity.setEnable(true);
-        userEntity.setRoleEntityList(roleEntityList);
+        userEntity.setRoles(roleEntityList);
         userRepository.save(userEntity);
     }
 
@@ -48,6 +54,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findByUserName(String userName) {
         UserEntity userEntity = userRepository.findByUserName(userName);
+        return userEntity;
+    }
+
+    @Override
+    public UserEntity getLoginUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtUserDetail jwtUserDetail = null;
+
+        if (Objects.nonNull(authentication)){
+            Object principal = authentication.getPrincipal();
+            if (Objects.nonNull(principal)) {
+                jwtUserDetail = (JwtUserDetail) principal;
+            }
+        }
+        String userName = jwtUserDetail.getUserName();
+        UserEntity userEntity = findByUserName(userName);
         return userEntity;
     }
 

@@ -27,7 +27,7 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
         //将数据库的roles解析为UserDetails的权限集
         StringBuilder roles = new StringBuilder();
-        userEntity.getRoleEntityList().stream().forEach( (roleEntity)-> {
+        userEntity.getRoles().stream().forEach( (roleEntity)-> {
             roles.append(roleEntity.getRoleName()).append(",");
         });
 

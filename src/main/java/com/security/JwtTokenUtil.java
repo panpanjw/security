@@ -36,7 +36,7 @@ public class JwtTokenUtil {
 
         Map<String, Object> map = new HashMap<>();
         map.put("id", userEntity.getId());
-        map.put("username", userEntity.getUserName());
+        map.put("userName", userEntity.getUserName());
 
         JwtBuilder jwtBuilder = Jwts.builder()
                 .setId(UUID.randomUUID().toString())
@@ -59,7 +59,7 @@ public class JwtTokenUtil {
         String userName = null;
         try {
             Claims claims = getClaimsFormToken(token);
-            userName = claims.get("sub", String.class);
+            userName = claims.get("userName", String.class);
         } catch (Exception e){
             userName = null;
         }
@@ -82,7 +82,8 @@ public class JwtTokenUtil {
             return false;
         }
 
-        if ( !jwtUserDetail.equals(userName) ){
+        String userNameRe = jwtUserDetail.getUserName();
+        if ( !userNameRe.equals(userName) ){
             return false;
         }
 
@@ -129,7 +130,7 @@ public class JwtTokenUtil {
         try {
             Claims claims = getClaimsFormToken(token);
             Date expiration = claims.getExpiration();
-            return expiration.before(new Date());
+            return expiration.after(new Date());
         } catch (Exception e) {
             return false;
         }

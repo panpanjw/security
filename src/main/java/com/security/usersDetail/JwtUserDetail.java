@@ -77,4 +77,16 @@ public class JwtUserDetail implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

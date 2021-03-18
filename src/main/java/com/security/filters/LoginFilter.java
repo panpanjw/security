@@ -46,7 +46,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login", "POST"));
     }
 
-
     /**
      * 获取用户参数并校验
      * @param request
@@ -87,6 +86,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String token = JwtTokenUtil.createToken(userEntity, millis);
         //将Token信息返回给用户
         response.addHeader("Authorization", "JWT " + token);
+    }
+
+    @Autowired
+    @Override
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
     }
 
 

@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author panjw
@@ -22,4 +23,11 @@ public class RoleEntity {
 
     @Column(name = "roleName")
     private String roleName;
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "roles_permission",
+            joinColumns = @JoinColumn(name = "roleId"),
+            inverseJoinColumns = @JoinColumn(name = "permisionId"))
+    private List<PermissionEntity> permissionEntityList;
 }

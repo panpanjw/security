@@ -12,4 +12,6 @@ public interface UserService {
     public void addRole();
 
     public UserEntity findByUserName(String userName);
+
+    public UserEntity getLoginUser();
 }
