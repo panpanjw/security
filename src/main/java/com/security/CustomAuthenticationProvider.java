@@ -36,7 +36,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throw new AccountExpiredException("用户被禁用");
         }
 
-
         if (!userEntity.getUserName().equals(authentication.getCredentials().toString()) ){
             throw new PasswordErrorException("密码错误");
         }
