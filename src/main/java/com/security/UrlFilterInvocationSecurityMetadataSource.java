@@ -15,6 +15,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import sun.security.provider.PolicyParser;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         //获取请求地址
-        String requestUrl = ((FilterInvocation) object).getRequestUrl();
+        HttpServletRequest request = ((FilterInvocation) object).getRequest();
 
         //获取所有权限
         List<PermissionEntity> permissionEntityList = permissionReposiroty.findAll();
@@ -51,7 +52,8 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
             if (StringUtils.isEmpty(permissionEntity.getUrl())){
                 continue;
             }
-            if (antPathMatcher.match(permissionEntity.getUrl(), requestUrl)){
+            antPathMatcher = new AntPathMatcher(permissionEntity.getUrl());
+            if (antPathMatcher.match(permissionEntity.getUrl(), String.valueOf(request))){
                 //获取该url权限的所有角色
                 //获取所有角色
                 List<RoleEntity>  roleEntityList = roleRepository.findAllByPermissionEntityListContaining(permissionEntity);
