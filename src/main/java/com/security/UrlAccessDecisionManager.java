@@ -28,12 +28,13 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
 
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
+        //获取当前用户所具有的角色
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        for (GrantedAuthority grantedAuthority : authorities){
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
         while (iterator.hasNext()){
             ConfigAttribute configAttribute = iterator.next();
-            //获取当前用户所具有的角色
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-            for (GrantedAuthority grantedAuthority : authorities){
+
                 if (grantedAuthority.equals(configAttribute.getAttribute())){
                     return;
                 }
