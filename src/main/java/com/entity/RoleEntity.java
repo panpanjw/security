@@ -1,6 +1,7 @@
 package com.entity;
 
 import lombok.Data;
+import org.aspectj.lang.annotation.Aspect;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -10,7 +11,7 @@ import java.util.List;
  * @author panjw
  * @date 2021/3/15 22:34
  */
-
+@Aspect
 @Data
 @Entity
 @Table(name = "roles")
